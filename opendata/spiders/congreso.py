@@ -15,10 +15,13 @@ class CongresoSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=r'fichaDiputado'), callback='parse_member'),
-        Rule(LinkExtractor(allow=r'letraElegida'), follow=True)
+        Rule(LinkExtractor(allow=r'Diputados'), follow=True)
     )
 
     def parse_member(self, response):
         loader = ItemLoader(item=MemberItem(), response=response)
         loader.add_xpath('name', '//div[@class="nombre_dip"]/text()')
+        loader.add_xpath('term', '//div[@id="curriculum"]/div[@class="principal"]/text()')
+        loader.add_xpath('province', '//div[@class="texto_dip"]/ul/li/div[@class="dip_rojo"]/text()')
+        loader.add_xpath('party', '//div[@class="texto_dip"]/ul/li/div[@class="dip_rojo"]/a/text()')
         yield loader.load_item()

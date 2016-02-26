@@ -6,9 +6,23 @@
 # http://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+from scrapy.contrib.loader.processor import Compose
+
+
+def take_first(value):
+    return value[0] if value else ""
+
+
+def clean_string(value):
+    return value.strip()
 
 
 class MemberItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    name = scrapy.Field()
+    name = scrapy.Field(output_processor=Compose(take_first,
+                                                 clean_string))
+    term = scrapy.Field(output_processor=Compose(take_first,
+                                                 clean_string))
+    province = scrapy.Field(output_processor=Compose(take_first,
+                                                     clean_string))
+    party = scrapy.Field(output_processor=Compose(take_first,
+                                                  clean_string))
