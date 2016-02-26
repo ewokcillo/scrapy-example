@@ -8,9 +8,6 @@ import pymongo
 
 
 class MongoPipeline(object):
-
-    collection_name = 'members'
-
     def __init__(self, mongo_host, mongo_db, mongo_port):
         self.mongo_host = mongo_host
         self.mongo_db = mongo_db
@@ -32,5 +29,6 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        self.db[self.collection_name].insert(dict(item))
+        collection = self.db[spider.name]
+        collection.update({'id': item['id']}, item, True)
         return item

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 from scrapy.spiders import CrawlSpider, Rule
@@ -20,6 +22,8 @@ class CongresoSpider(CrawlSpider):
 
     def parse_member(self, response):
         loader = ItemLoader(item=MemberItem(), response=response)
+        matchs = re.search(r'idDiputado%3D(\d+)', response.url)
+        loader.add_value('id', matchs.groups()[0])
         loader.add_xpath('name', '//div[@class="nombre_dip"]/text()')
         loader.add_xpath('term', '//div[@id="curriculum"]/div[@class="principal"]/text()')
         loader.add_xpath('province', '//div[@class="texto_dip"]/ul/li/div[@class="dip_rojo"]/text()')

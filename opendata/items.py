@@ -18,6 +18,7 @@ def clean_string(value):
 
 
 class MemberItem(scrapy.Item):
+    id = scrapy.Field(output_processor=Compose(take_first))
     name = scrapy.Field(output_processor=Compose(take_first,
                                                  clean_string))
     term = scrapy.Field(output_processor=Compose(take_first,
